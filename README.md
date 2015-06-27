@@ -27,7 +27,7 @@
 ###使用示例
 
 ```
-$ spark-submit --class MLAppLR out/artifacts/ScalaTest4_jar/ScalaTest4.jar --train=data/svmguide1 --test=data/svmguide1.t 
+$ spark-submit --master local[2] --class MLAppLR out/artifacts/ScalaTest4_jar/ScalaTest4.jar --train=data/svmguide1 --test=data/svmguide1.t 
 ```
 
 
@@ -36,3 +36,10 @@ GraphX中计算与每个结点距离为`K`的所有邻居，可用于产生推�
 
 * --edgeFile=\<edge_file\>：存储图中所有边的文件；每行的格式为`<src_id> <dst_id>`
 * --pathLength=\<path_length\>：路径长度，即`K`；默认值为`1`
+
+
+###使用示例
+
+```
+$ spark-submit --master local[2] --class GraphXApp out/artifacts/ScalaTest4_jar/ScalaTest4.jar --edgeFile=data/graphxapp --pathLength=3
+```
