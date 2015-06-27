@@ -1,5 +1,3 @@
-package main.scala
-
 import org.apache.spark.graphx._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -10,6 +8,25 @@ import scala.reflect.ClassTag
  * Created by king on 15/6/11.
  */
 object GraphXApp {
+
+  def parseArguments(args: Array[String]) = {
+    val options = args.map {
+      arg =>
+        arg.dropWhile(_ == '-').split('=') match {
+          case Array(opt, v) => (opt -> v)
+          case _ => throw new IllegalArgumentException("Invalid argument: " + arg)
+        }
+    }
+
+    val arguments = scala.collection.mutable.Map[String, Any]("pathLength" -> 1)
+
+    options.foreach {
+      case ("edgeFile", v) => arguments("edgeFile") = v
+      case ("pathLength", v) => arguments("pathLength") = v.toInt
+      case (opt, _) => throw new IllegalArgumentException("Invalid option: " + opt)
+    }
+    arguments
+  }
 
   def createGraph(sc: SparkContext): Graph[Map[VertexId, (Int, Double)], String] = {
     val initNumAndWeight: (Int, Double) = (3, 1.0)
@@ -27,8 +44,8 @@ object GraphXApp {
     graph
   }
 
-  def readGraphFromFile(sc: SparkContext, fileName: String) = {
-    val initNumAndWeight: (Int, Double) = (3, 1.0)
+  def readGraphFromFile(sc: SparkContext, fileName: String, pathLength: Int) = {
+    val initNumAndWeight: (Int, Double) = (pathLength, 1.0)
     val graph = GraphLoader.edgeListFile(sc, fileName)
     graph.mapVertices((vertexId, _) => Map(vertexId -> initNumAndWeight))
     //val newVertexRDD = graph.vertices.mapValues((vertexId, _) => Map(vertexId -> initNumAndWeight))
@@ -58,13 +75,17 @@ object GraphXApp {
   }
 
   def main (args: Array[String]) {
-    val conf = new SparkConf().setMaster("local").setAppName("GraphXApp")
+    val conf = new SparkConf().setAppName("GraphXApp_BD")
     val sc = new SparkContext(conf)
-    //val graph = createGraph(sc)
-    val graph = readGraphFromFile(sc, "data/graphxapp")
+    val arguments = parseArguments(args)
+    println(args.mkString(", "))
+    println(arguments.mkString(", "))
+
+    val pathLength = arguments("pathLength").asInstanceOf[Int]
+    val graph = readGraphFromFile(sc, arguments("edgeFile").toString, pathLength)
 
     var graphVertices: VertexRDD[Map[VertexId, (Int, Double)]] = graph.vertices
-    for (transmitNum <- (1 to 3).reverse) {
+    for (transmitNum <- (1 to pathLength).reverse) {
       graphVertices = transmitNeighbor(graphVertices, graph.edges, transmitNum)
       graphVertices.collect.foreach(x => printf("dst: %d;\t src: %s\n", x._1, x._2.mkString(" ")))
       println("Step " + transmitNum)

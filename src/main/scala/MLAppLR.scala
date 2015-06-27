@@ -10,7 +10,7 @@ import org.apache.spark.mllib.util.MLUtils
  */
 object MLAppLR {
 
-  def getArguments(args: Array[String]) = {
+  def parseArguments(args: Array[String]) = {
     val options = args.map {
       arg =>
         arg.dropWhile(_ == '-').split('=') match {
@@ -19,7 +19,7 @@ object MLAppLR {
         }
     }
 
-    var arguments = scala.collection.mutable.Map[String, Any]("algName" -> "sgd")
+    val arguments = scala.collection.mutable.Map[String, Any]("algName" -> "sgd")
     val numIterations = 50
     val regParam = 0.1
     val stepSize = 0.1
@@ -77,9 +77,9 @@ object MLAppLR {
 
 
   def main (args: Array[String]) {
-    val conf = new SparkConf().setAppName("MLApp_LogisticRegression")
+    val conf = new SparkConf().setAppName("MLAppLR_BD")
     val sc = new SparkContext(conf)
-    val arguments = getArguments(args)
+    val arguments = parseArguments(args)
     println(args.mkString(", "))
     println(arguments.mkString(", "))
 
@@ -109,7 +109,7 @@ object MLAppLR {
     val metrics = new BinaryClassificationMetrics(scoreAndLabels)
     val auROC = metrics.areaUnderROC()
 
-    println("AUC = " + auROC)
+    println("AUC for the test set = " + auROC)
 
   }
 

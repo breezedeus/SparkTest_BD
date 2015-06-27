@@ -22,6 +22,7 @@
 * --convergenceTol=\<convergence_tolerance\>：只针对LBFGS，表示LBFGS中的收敛标准；默认值为`1e-5`
 * --miniBatchFraction=\<mini\_batch\_fraction\>：只针对SGD，表示SGD每次迭代使用的mini batch数量占总样本集的比例；默认值为`0.01`
 
+最后会返回在测试集上的`AUC`。
 
 ## 类`GraphXApp`
 GraphX中计算与每个结点距离为`K`的所有邻居，可用于产生推荐候选集（可取`K=3`）。
