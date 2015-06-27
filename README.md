@@ -26,9 +26,9 @@
 
 ###使用示例
 
-{% highlight sh %}
+```
 $ spark-submit --class MLAppLR out/artifacts/ScalaTest4_jar/ScalaTest4.jar --train=data/svmguide1 --test=data/svmguide1.t 
-{% endhighlight %}
+```
 
 
 ## 类`GraphXApp`
