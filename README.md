@@ -24,5 +24,15 @@
 
 最后会返回在测试集上的`AUC`。
 
+###使用示例
+
+{% highlight bash %}
+$ spark-submit --class MLAppLR out/artifacts/ScalaTest4_jar/ScalaTest4.jar --train=data/svmguide1 --test=data/svmguide1.t 
+{% endhighlight %}
+
+
 ## 类`GraphXApp`
-GraphX中计算与每个结点距离为`K`的所有邻居，可用于产生推荐候选集（可取`K=3`）。
+GraphX中计算与每个结点距离为`K`的所有邻居，可用于产生推荐候选集（可取`K=3`）。支持的所有参数如下：
+
+* --edgeFile=\<edge_file\>：存储图中所有边的文件；每行的格式为`<src_id> <dst_id>`
+* --pathLength=\<path_length\>：路径长度，即`K`；默认值为`1`
