@@ -22,6 +22,7 @@ object GraphXApp {
 
     options.foreach {
       case ("edgeFile", v) => arguments("edgeFile") = v
+      case ("output", v) => arguments("outputFileName") = v
       case ("pathLength", v) => arguments("pathLength") = v.toInt
       case (opt, _) => throw new IllegalArgumentException("Invalid option: " + opt)
     }
@@ -89,6 +90,12 @@ object GraphXApp {
       graphVertices = transmitNeighbor(graphVertices, graph.edges, transmitNum)
       graphVertices.collect.foreach(x => printf("dst: %d;\t src: %s\n", x._1, x._2.mkString(" ")))
       println("Step " + transmitNum)
+    }
+
+    if (arguments.contains("outputFileName")) {
+      graphVertices.mapValues(
+        (k: VertexId, v: Map[VertexId, (Int, Double)]) => "\t src: " + v.mkString(" ")
+      ).saveAsTextFile(arguments("outputFileName").toString)
     }
   }
 

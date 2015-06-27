@@ -31,6 +31,7 @@ object MLAppLR {
     options.foreach {
       case ("train", v) => arguments("trainFileName") = v
       case ("test", v) => arguments("testFileName") = v
+      case ("output", v) => arguments("outputFileName") = v
       case ("algName", v) => arguments("algName") = v
       case ("numIterations", v) => arguments("numIterations") = v.toInt
       case ("regParam", v) => arguments("regParam") = v.toDouble
@@ -83,13 +84,6 @@ object MLAppLR {
     println(args.mkString(", "))
     println(arguments.mkString(", "))
 
-    /*
-    val dataDir = "data"
-    val train_file = dataDir + "/svmguide1"
-    val data = MLUtils.loadLibSVMFile(sc, train_file)
-    val splits = data.randomSplit(Array(0.6, 0.4), seed=11L)
-    val (training, test) = (splits(0).cache(), splits(1))
-    */
     val (train, test) = getData(sc, arguments)
     printf("#train examples: %d, #features: %d\n", train.count, train.first().features.size)
     printf("#test examples: %d, #features: %d\n", test.count, test.first().features.size)
@@ -104,6 +98,10 @@ object MLAppLR {
     val scoreAndLabels = test.map { point =>
       val score = model.predict(point.features)
       (score, point.label)
+    }
+
+    if (arguments.contains("outputFileName")) {
+      scoreAndLabels.saveAsTextFile(arguments("outputFileName").toString)
     }
 
     val metrics = new BinaryClassificationMetrics(scoreAndLabels)
