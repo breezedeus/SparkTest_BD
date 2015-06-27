@@ -36,7 +36,7 @@ $ spark-submit --master local[2] --class MLAppLR out/artifacts/ScalaTest4_jar/Sc
 GraphX中计算与每个结点距离为`K`的所有邻居，可用于产生推荐候选集（可取`K=3`）。支持的所有参数如下：
 
 * --edgeFile=\<edge_file\>：存储图中所有边的文件；每行的格式为`<src_id> <dst_id>`
-* --output=\<output_file\>：获得的图上指定距离的邻居结果存入指定目录；如果目录已经存在，需要先删除；此参数可不传，不传的话就不输出预测结果
+* --output=\<output_file\>：获得的图上指定距离的邻居结果存入指定目录；如果目录已经存在，需要先删除；此参数可不传，不传的话就不输出计算结果
 
 * --pathLength=\<path_length\>：路径长度，即`K`；默认值为`1`
 

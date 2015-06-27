@@ -29,6 +29,7 @@ object GraphXApp {
     arguments
   }
 
+  @deprecated
   def createGraph(sc: SparkContext): Graph[Map[VertexId, (Int, Double)], String] = {
     val initNumAndWeight: (Int, Double) = (3, 1.0)
     // Create an RDD for the vertices
