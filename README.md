@@ -1,3 +1,6 @@
+# 文档
+这是我在部门内部的[Spark分享slides](http://pan.baidu.com/s/1nrscQ)，内容从IDE到Spark里最重要的一些基本概念。
+
 
 # 编译环境推荐
 
